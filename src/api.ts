@@ -1,16 +1,5 @@
 import axios, {AxiosResponse} from 'axios';
-
-export type TagType = string;
-
-export type TeamType = string;
-
-export type TransactionType = {
-  id: number;
-  date: number;
-  amountInCents: number;
-  tags: TagType[];
-  teams: TeamType[];
-};
+import {TagType, TeamType, TransactionType} from './types';
 
 const instance = axios.create({
   baseURL: 'https://my.api.mockaroo.com/',
