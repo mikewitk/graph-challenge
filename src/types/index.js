@@ -1,6 +1,6 @@
-export type TagType = string;
+export type TagType = {tag: string};
 
-export type TeamType = string;
+export type TeamType = {team: string};
 
 export type TransactionType = {
   id: number,
