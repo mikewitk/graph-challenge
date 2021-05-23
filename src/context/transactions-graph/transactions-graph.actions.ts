@@ -94,8 +94,14 @@ export const getFilteredTransactionsAsync = filterOptions => {
       const transactions = await Transaction.getTransactions();
       dispatch(getTransactionsSuccess(transactions));
       dispatch(getFilteredTransactions(filterOptions));
+      dispatch(toggleFilterModal());
     } catch (error) {
       dispatch(getTransactionsFailure(error.message));
+      dispatch(toggleFilterModal());
     }
   };
 };
+
+export const toggleFilterModal = () => ({
+  type: TransactionsGraphType.TOGGLE_FILTER_MODAL,
+});

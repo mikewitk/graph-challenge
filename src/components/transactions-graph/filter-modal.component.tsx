@@ -1,40 +1,24 @@
 import {Modal, Select, DatePicker} from 'antd';
-import React, {FC, useContext, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {TransactionsGraphContext} from '../../context/transactions-graph';
 import moment from 'moment';
 
 const {Option} = Select;
 const {RangePicker} = DatePicker;
 
-const CalendarContainer = {
-  width: '300px',
-  border: '1px solid #f0f0f0',
-  borderRadius: '2px',
-};
-
-type FilterModalProps = {
-  toggleModal: () => void;
-};
-
-const FilterModal: FC<FilterModalProps> = ({toggleModal}) => {
-  const [confirmLoading, setConfirmLoading] = useState(false);
-
-  const {tags, teams, selectedFilters, filterTransactions} = useContext(
-    TransactionsGraphContext,
-  );
+const FilterModal = () => {
+  const {
+    tags,
+    teams,
+    selectedFilters,
+    filterTransactions,
+    toggleFilterModalHandler,
+    isLoadingTransactions,
+  } = useContext(TransactionsGraphContext);
   const [filterSettings, setFilterSettings] = useState(selectedFilters);
 
   const handleOk = () => {
-    setConfirmLoading(true);
     filterTransactions(filterSettings);
-    setTimeout(() => {
-      setConfirmLoading(false);
-      toggleModal();
-    }, 2000);
-  };
-
-  const handleCancel = () => {
-    toggleModal();
   };
 
   const tagOptions = [];
@@ -79,13 +63,13 @@ const FilterModal: FC<FilterModalProps> = ({toggleModal}) => {
   return (
     <>
       <Modal
-        title="Title"
+        title="Filter options"
         visible={true}
         onOk={handleOk}
-        confirmLoading={confirmLoading}
-        onCancel={handleCancel}
+        confirmLoading={isLoadingTransactions}
+        onCancel={toggleFilterModalHandler}
       >
-        <div style={CalendarContainer}>
+        <div>
           <RangePicker
             onChange={onDateChange}
             value={[

@@ -4,8 +4,8 @@ export type TeamType = {team: string};
 
 export type TransactionType = {
   id: number,
-  date: number,
+  date: string,
   amountInCents: number,
-  tags: TagType[],
-  teams: TeamType[],
+  tags: string,
+  teams: string,
 };

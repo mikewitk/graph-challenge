@@ -32,32 +32,23 @@ export const filterTransactionsByQuery = (
   transactions: Array<TransactionType>,
   query,
 ) => {
-  console.log(`query`, query);
   let filteredTransactions = [...transactions];
   if (query.startDate !== undefined && query.startDate !== null) {
-    console.log('startDate');
-
     filteredTransactions = filteredTransactions.filter(transaction =>
       moment(transaction.date).isAfter(query.startDate),
     );
   }
   if (query.endDate !== undefined && query.endDate !== null) {
-    console.log('endDate');
-
     filteredTransactions = filteredTransactions.filter(transaction =>
       moment(transaction.date).isBefore(query.endDate),
     );
   }
   if (query.tag !== undefined && query.tag !== null && query.tag !== '') {
-    console.log('tag');
-
     filteredTransactions = filteredTransactions.filter(
       transaction => transaction.tags === query.tag,
     );
   }
   if (query.team !== undefined && query.team !== null && query.team !== '') {
-    console.log('team');
-
     filteredTransactions = filteredTransactions.filter(
       transaction => transaction.teams === query.team,
     );

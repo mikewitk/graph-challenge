@@ -7,7 +7,7 @@ import {
   getTransactionsStartAsync,
   getTagsStartAsync,
   getTeamsStartAsync,
-  getFilteredTransactions,
+  toggleFilterModal,
   getFilteredTransactionsAsync,
 } from './transactions-graph.actions';
 
@@ -29,6 +29,8 @@ type initialStateProps = {
   isLoadingTags: boolean;
   isLoadingTeams: boolean;
   selectedFilters: selectedFilterProps;
+  isFilterModalOpen: boolean;
+  toggleFilterModalHandler: () => void;
 };
 
 const initialState: initialStateProps = {
@@ -47,6 +49,8 @@ const initialState: initialStateProps = {
     tag: undefined,
     team: undefined,
   },
+  isFilterModalOpen: false,
+  toggleFilterModalHandler: () => {},
 };
 
 export const TransactionsGraphContext = createContext(initialState);
@@ -65,6 +69,10 @@ export const TransactionsGraphProvider = ({children}: GlobalProviderProps) => {
 
   const filterTransactions = (filterOptions: selectedFilterProps) => {
     return asyncDispatch(getFilteredTransactionsAsync(filterOptions));
+  };
+
+  const toggleFilterModalHandler = () => {
+    return dispatch(toggleFilterModal());
   };
 
   useEffect(() => {
@@ -86,6 +94,8 @@ export const TransactionsGraphProvider = ({children}: GlobalProviderProps) => {
         isLoadingTags: state.isLoadingTags,
         isLoadingTeams: state.isLoadingTeams,
         selectedFilters: state.selectedFilters,
+        isFilterModalOpen: state.isFilterModalOpen,
+        toggleFilterModalHandler,
       }}
     >
       {children}

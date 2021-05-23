@@ -1,5 +1,5 @@
 import {Col, Row, Typography, Button} from 'antd';
-import React, {useContext, useState} from 'react';
+import React, {useContext} from 'react';
 import {CartesianGrid, Line, LineChart, Tooltip, XAxis, YAxis} from 'recharts';
 import {TransactionsGraphContext} from '../../context/transactions-graph';
 import ModalFilteringOptions from './filter-modal.component';
@@ -8,12 +8,12 @@ import {FilterFilled} from '@ant-design/icons';
 const {Title} = Typography;
 
 const TransactionsGraph = () => {
-  const {transactions, totalSpent} = useContext(TransactionsGraphContext);
-  const [showModal, setShowModal] = useState(false);
-
-  const toggleModal = () => {
-    setShowModal(prevState => !prevState);
-  };
+  const {
+    transactions,
+    totalSpent,
+    isFilterModalOpen,
+    toggleFilterModalHandler,
+  } = useContext(TransactionsGraphContext);
 
   return (
     <div>
@@ -27,10 +27,10 @@ const TransactionsGraph = () => {
             type="primary"
             shape="circle"
             icon={<FilterFilled />}
-            onClick={toggleModal}
+            onClick={toggleFilterModalHandler}
           />
         </Col>
-        {showModal && <ModalFilteringOptions toggleModal={toggleModal} />}
+        {isFilterModalOpen && <ModalFilteringOptions />}
       </Row>
       <LineChart width={1000} height={600} data={transactions}>
         <Line type="monotone" dataKey="amountInCents" stroke="#8884d8" />

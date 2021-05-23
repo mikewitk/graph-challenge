@@ -75,6 +75,12 @@ const TransactionsGraphReducer = (state, action) => {
         selectedFilters: action.payload,
         transactions: filteredTransactions,
       };
+
+    case TransactionsGraphTypes.TOGGLE_FILTER_MODAL:
+      return {
+        ...state,
+        isFilterModalOpen: !state.isFilterModalOpen,
+      };
     default:
       return state;
   }
