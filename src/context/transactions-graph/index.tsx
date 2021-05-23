@@ -1,15 +1,17 @@
-import React, {createContext, useReducer, useEffect} from 'react';
+import React, {createContext, useReducer, useEffect, useMemo} from 'react';
 import TransactionsGraphReducer from './transactions-graph.reducer';
 import {TransactionType, TeamType, TagType} from '../../types';
 import * as TransactionsGraphTypes from './transactions-graph.types';
-import {Transaction} from '../../api';
+import {wrapAsync} from '../utils';
+import {getTransactionsStartAsync} from './transactions-graph.actions';
 
 type initialStateProps = {
   transactions: Array<TransactionType>;
   teams: Array<TeamType>;
   tags: Array<TagType>;
   filterTransactions: (filterOptions: Array<TransactionType>) => void;
-  // getTransactions: () => void;
+  isLoading: boolean;
+  errorMessage: undefined;
 };
 
 const initialState: initialStateProps = {
@@ -17,7 +19,8 @@ const initialState: initialStateProps = {
   teams: [],
   tags: [],
   filterTransactions: filterOptions => {},
-  // getTransactions: () => {};
+  isLoading: false,
+  errorMessage: undefined,
 };
 
 export const TransactionsGraphContext = createContext(initialState);
@@ -28,14 +31,7 @@ type GlobalProviderProps = {
 
 export const TransactionsGraphProvider = ({children}: GlobalProviderProps) => {
   const [state, dispatch] = useReducer(TransactionsGraphReducer, initialState);
-
-  const getTransactions = async () => {
-    const result = await Transaction.getTransactions();
-    return dispatch({
-      type: TransactionsGraphTypes.SET_TRANSACTIONS,
-      payload: result,
-    });
-  };
+  const asyncDispatch = useMemo(() => wrapAsync(dispatch), [dispatch]);
 
   const filterTransactions = (filterOptions: TransactionType[]) => {
     return dispatch({
@@ -45,8 +41,8 @@ export const TransactionsGraphProvider = ({children}: GlobalProviderProps) => {
   };
 
   useEffect(() => {
-    getTransactions();
-  }, []);
+    asyncDispatch(getTransactionsStartAsync());
+  }, [asyncDispatch]);
 
   return (
     <TransactionsGraphContext.Provider
@@ -55,6 +51,8 @@ export const TransactionsGraphProvider = ({children}: GlobalProviderProps) => {
         teams: state.teams,
         tags: state.tags,
         filterTransactions,
+        isLoading: state.isLoading,
+        errorMessage: state.errorMessage,
       }}
     >
       {children}
