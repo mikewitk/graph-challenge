@@ -1,6 +1,11 @@
 import * as TransactionsGraphType from './transactions-graph.types';
 import {TagType, TeamType, TransactionType} from '../../types';
 import {Transaction, Tags, Teams} from '../../api';
+import {selectedFilterProps} from './index';
+
+/*
+ Async/Await on this file were left since it's possible to change how the data is retrieved on api.ts file
+*/
 
 export const getTransactionsStart = () => ({
   type: TransactionsGraphType.GET_TRANSACTIONS_START,
@@ -19,7 +24,7 @@ export const getTransactionsFailure = (errorMessage: string) => ({
 });
 
 export const getTransactionsStartAsync = () => {
-  return async dispatch => {
+  return async (dispatch: any) => {
     dispatch(getTransactionsStart());
     try {
       const transactions = await Transaction.getTransactions();
@@ -45,7 +50,7 @@ export const getTagsFailure = (errorMessage: string) => ({
 });
 
 export const getTagsStartAsync = () => {
-  return async dispatch => {
+  return async (dispatch: any) => {
     dispatch(getTagsStart());
     try {
       const tags = await Tags.getTags();
@@ -71,7 +76,7 @@ export const getTeamsFailure = (errorMessage: string) => ({
 });
 
 export const getTeamsStartAsync = () => {
-  return async dispatch => {
+  return async (dispatch: any) => {
     dispatch(getTeamsStart());
     try {
       const teams = await Teams.getTeams();
@@ -82,13 +87,17 @@ export const getTeamsStartAsync = () => {
   };
 };
 
-export const getFilteredTransactions = filterOptions => ({
+export const getFilteredTransactions = (
+  filterOptions: selectedFilterProps,
+) => ({
   type: TransactionsGraphType.FILTER_TRANSACTIONS,
   payload: filterOptions,
 });
 
-export const getFilteredTransactionsAsync = filterOptions => {
-  return async dispatch => {
+export const getFilteredTransactionsAsync = (
+  filterOptions: selectedFilterProps,
+) => {
+  return async (dispatch: any) => {
     dispatch(getTransactionsStart());
     try {
       const transactions = await Transaction.getTransactions();

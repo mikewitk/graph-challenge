@@ -1,8 +1,9 @@
 import {TransactionType} from '../../types';
 import * as TransactionsGraphTypes from './transactions-graph.types';
 import {sortAsc, filterTransactionsByQuery} from '../utils';
+import {InitialStateProps} from './index';
 
-const TransactionsGraphReducer = (state, action) => {
+const TransactionsGraphReducer = (state: InitialStateProps, action: any) => {
   switch (action.type) {
     case TransactionsGraphTypes.GET_TRANSACTIONS_START:
       return {

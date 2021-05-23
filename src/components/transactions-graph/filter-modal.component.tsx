@@ -39,20 +39,20 @@ const FilterModal = () => {
     );
   }
 
-  function tagSelectHandler(value) {
+  function tagSelectHandler(value: string) {
     setFilterSettings({
       ...filterSettings,
       tag: value,
     });
   }
-  function teamSelectHandler(value) {
+  function teamSelectHandler(value: string) {
     setFilterSettings({
       ...filterSettings,
       team: value,
     });
   }
 
-  function onDateChange(value) {
+  function onDateChange(value: any) {
     setFilterSettings({
       ...filterSettings,
       startDate: moment(value[0]),

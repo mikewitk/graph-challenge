@@ -1,15 +1,14 @@
+import {Layout} from 'antd';
 import React from 'react';
 import './App.css';
 import TransactionsGraph from './components/transactions-graph/transactions-graph.component';
 import {TransactionsGraphProvider} from './context/transactions-graph';
-import {Layout} from 'antd';
 
-const {Header, Footer, Content} = Layout;
+const {Content} = Layout;
 
 function App() {
   return (
     <Layout>
-      <Header>Header</Header>
       <Content>
         <div className="App">
           <TransactionsGraphProvider>
@@ -17,7 +16,6 @@ function App() {
           </TransactionsGraphProvider>
         </div>
       </Content>
-      <Footer>Footer</Footer>
     </Layout>
   );
 }

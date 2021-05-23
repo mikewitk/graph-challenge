@@ -1,5 +1,6 @@
 import moment from 'moment';
 import {TransactionType} from '../types';
+import {selectedFilterProps} from './transactions-graph';
 
 type ThunkAction<T> = (dispatch: React.Dispatch<T>) => T;
 type AsyncDispatch<T> = React.Dispatch<T | ThunkAction<T>>;
@@ -30,7 +31,7 @@ export const sumTotal = (transactions: Array<TransactionType>) => {
 
 export const filterTransactionsByQuery = (
   transactions: Array<TransactionType>,
-  query,
+  query: selectedFilterProps,
 ) => {
   let filteredTransactions = [...transactions];
   if (query.startDate !== undefined && query.startDate !== null) {
