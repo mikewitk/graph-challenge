@@ -1,11 +1,11 @@
 import React from 'react';
-
+import {TransactionsGraphProvider} from '../../context/transactions-graph';
 const TransactionsGraph = () => {
   return (
-    <div>
+    <TransactionsGraphProvider>
       This is a graph
       <p>Very cool graph</p>
-    </div>
+    </TransactionsGraphProvider>
   );
 };
 
