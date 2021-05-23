@@ -11,7 +11,7 @@ const TransactionsGraph = () => {
       <LineChart width={1000} height={600} data={transactions}>
         <Line type="monotone" dataKey="amountInCents" stroke="#8884d8" />
         <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-        <XAxis dataKey="id" />
+        <XAxis dataKey="date" />
         <YAxis />
         <Tooltip />
       </LineChart>
