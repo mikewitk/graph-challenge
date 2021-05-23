@@ -1,24 +1,34 @@
 import React, {createContext, useReducer, useEffect, useMemo} from 'react';
 import TransactionsGraphReducer from './transactions-graph.reducer';
 import {TransactionType, TeamType, TagType} from '../../types';
-import * as TransactionsGraphTypes from './transactions-graph.types';
+
 import {wrapAsync, sumTotal} from '../utils';
 import {
   getTransactionsStartAsync,
   getTagsStartAsync,
   getTeamsStartAsync,
+  getFilteredTransactions,
+  getFilteredTransactionsAsync,
 } from './transactions-graph.actions';
+
+export type selectedFilterProps = {
+  startDate: any;
+  endDate: any;
+  tag: string | undefined;
+  team: string | undefined;
+};
 
 type initialStateProps = {
   transactions: Array<TransactionType>;
   teams: Array<TeamType>;
   tags: Array<TagType>;
-  filterTransactions: (filterOptions: Array<TransactionType>) => void;
+  filterTransactions: (filterOptions: selectedFilterProps) => void;
   isLoadingTransactions: boolean;
   errorMessage: undefined;
   totalSpent: number;
   isLoadingTags: boolean;
   isLoadingTeams: boolean;
+  selectedFilters: selectedFilterProps;
 };
 
 const initialState: initialStateProps = {
@@ -31,6 +41,12 @@ const initialState: initialStateProps = {
   totalSpent: 0,
   isLoadingTags: false,
   isLoadingTeams: false,
+  selectedFilters: {
+    startDate: new Date(),
+    endDate: new Date(),
+    tag: undefined,
+    team: undefined,
+  },
 };
 
 export const TransactionsGraphContext = createContext(initialState);
@@ -47,11 +63,8 @@ export const TransactionsGraphProvider = ({children}: GlobalProviderProps) => {
     [state.transactions],
   );
 
-  const filterTransactions = (filterOptions: TransactionType[]) => {
-    return dispatch({
-      type: TransactionsGraphTypes.FILTER_TRANSACTIONS,
-      payload: filterOptions,
-    });
+  const filterTransactions = (filterOptions: selectedFilterProps) => {
+    return asyncDispatch(getFilteredTransactionsAsync(filterOptions));
   };
 
   useEffect(() => {
@@ -72,6 +85,7 @@ export const TransactionsGraphProvider = ({children}: GlobalProviderProps) => {
         totalSpent,
         isLoadingTags: state.isLoadingTags,
         isLoadingTeams: state.isLoadingTeams,
+        selectedFilters: state.selectedFilters,
       }}
     >
       {children}

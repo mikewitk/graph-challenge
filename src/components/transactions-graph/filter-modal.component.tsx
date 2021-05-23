@@ -1,6 +1,7 @@
 import {Modal, Select, DatePicker} from 'antd';
-import React, {FC, useContext} from 'react';
+import React, {FC, useContext, useState} from 'react';
 import {TransactionsGraphContext} from '../../context/transactions-graph';
+import moment from 'moment';
 
 const {Option} = Select;
 const {RangePicker} = DatePicker;
@@ -16,12 +17,16 @@ type FilterModalProps = {
 };
 
 const FilterModal: FC<FilterModalProps> = ({toggleModal}) => {
-  const [confirmLoading, setConfirmLoading] = React.useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
 
-  const {tags, teams} = useContext(TransactionsGraphContext);
+  const {tags, teams, selectedFilters, filterTransactions} = useContext(
+    TransactionsGraphContext,
+  );
+  const [filterSettings, setFilterSettings] = useState(selectedFilters);
 
   const handleOk = () => {
     setConfirmLoading(true);
+    filterTransactions(filterSettings);
     setTimeout(() => {
       setConfirmLoading(false);
       toggleModal();
@@ -50,12 +55,25 @@ const FilterModal: FC<FilterModalProps> = ({toggleModal}) => {
     );
   }
 
-  function handleChange(value) {
-    console.log(`selected ${value}`);
+  function tagSelectHandler(value) {
+    setFilterSettings({
+      ...filterSettings,
+      tag: value,
+    });
+  }
+  function teamSelectHandler(value) {
+    setFilterSettings({
+      ...filterSettings,
+      team: value,
+    });
   }
 
-  function onDateChange(value, mode) {
-    console.log(value, mode);
+  function onDateChange(value) {
+    setFilterSettings({
+      ...filterSettings,
+      startDate: moment(value[0]),
+      endDate: moment(value[1]),
+    });
   }
 
   return (
@@ -68,23 +86,29 @@ const FilterModal: FC<FilterModalProps> = ({toggleModal}) => {
         onCancel={handleCancel}
       >
         <div style={CalendarContainer}>
-          <RangePicker onChange={onDateChange} />
+          <RangePicker
+            onChange={onDateChange}
+            value={[
+              moment(filterSettings.startDate),
+              moment(filterSettings.endDate),
+            ]}
+          />
         </div>
         <Select
-          mode="multiple"
           allowClear
           style={{width: '100%'}}
           placeholder="Please select"
-          onChange={handleChange}
+          onChange={tagSelectHandler}
+          value={filterSettings.tag}
         >
           {tagOptions}
         </Select>
         <Select
-          mode="multiple"
           allowClear
           style={{width: '100%'}}
           placeholder="Please select"
-          onChange={handleChange}
+          onChange={teamSelectHandler}
+          value={filterSettings.team}
         >
           {teamOptions}
         </Select>

@@ -1,6 +1,6 @@
 import {TransactionType} from '../../types';
 import * as TransactionsGraphTypes from './transactions-graph.types';
-import {sortAsc} from '../utils';
+import {sortAsc, filterTransactionsByQuery} from '../utils';
 
 const TransactionsGraphReducer = (state, action) => {
   switch (action.type) {
@@ -64,7 +64,17 @@ const TransactionsGraphReducer = (state, action) => {
         errorMessage: action.payload,
         isLoadingTeams: false,
       };
+    case TransactionsGraphTypes.FILTER_TRANSACTIONS:
+      const filteredTransactions = filterTransactionsByQuery(
+        state.transactions,
+        action.payload,
+      );
 
+      return {
+        ...state,
+        selectedFilters: action.payload,
+        transactions: filteredTransactions,
+      };
     default:
       return state;
   }

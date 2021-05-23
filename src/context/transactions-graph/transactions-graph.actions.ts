@@ -81,3 +81,21 @@ export const getTeamsStartAsync = () => {
     }
   };
 };
+
+export const getFilteredTransactions = filterOptions => ({
+  type: TransactionsGraphType.FILTER_TRANSACTIONS,
+  payload: filterOptions,
+});
+
+export const getFilteredTransactionsAsync = filterOptions => {
+  return async dispatch => {
+    dispatch(getTransactionsStart());
+    try {
+      const transactions = await Transaction.getTransactions();
+      dispatch(getTransactionsSuccess(transactions));
+      dispatch(getFilteredTransactions(filterOptions));
+    } catch (error) {
+      dispatch(getTransactionsFailure(error.message));
+    }
+  };
+};
