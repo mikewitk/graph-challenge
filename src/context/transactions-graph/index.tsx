@@ -18,7 +18,7 @@ export type selectedFilterProps = {
   team: string | undefined;
 };
 
-type initialStateProps = {
+export type InitialStateProps = {
   transactions: Array<TransactionType>;
   teams: Array<TeamType>;
   tags: Array<TagType>;
@@ -33,7 +33,7 @@ type initialStateProps = {
   toggleFilterModalHandler: () => void;
 };
 
-const initialState: initialStateProps = {
+const initialState: InitialStateProps = {
   transactions: [],
   teams: [],
   tags: [],
@@ -53,7 +53,8 @@ const initialState: initialStateProps = {
   toggleFilterModalHandler: () => {},
 };
 
-export const TransactionsGraphContext = createContext(initialState);
+export const TransactionsGraphContext =
+  createContext<InitialStateProps>(initialState);
 
 type GlobalProviderProps = {
   children: React.ReactNode;
